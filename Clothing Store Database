@@ -1,0 +1,31 @@
+
+
+CREATE TABLE Merch_store (id INTEGER PRIMARY KEY, name TEXT, sales INTEGER, cost INTEGER, shipping INTEGER, impressions INTEGER, conversion_rate INTEGER);
+
+INSERT INTO Merch_store VALUES (1, "HS SWTST SM", 5, 9.99, 7.5, 312, 3);
+INSERT INTO Merch_store VALUES (2, "HS SWTST M", 7, 9.99, 7.5, 350, 4);
+INSERT INTO Merch_store VALUES (3, "HS SWTST L",11, 9.99, 7.5, 212, 5);
+INSERT INTO Merch_store VALUES (4,"Pleasing small", 12, 4.99, 7.5, 358, 3);
+INSERT INTO Merch_store VALUES (5, "pleasing med", 12, 5.99, 7.5, 399, 4);
+INSERT INTO Merch_store VALUES (6, "pleasing large", 13, 5.99, 7.5, 500, 4);
+INSERT INTO Merch_store VALUES (7,"Golden Tee small", 14, 6.99, 7.5, 600, 5); 
+INSERT INTO Merch_store VALUES (8, "Golden Tee med", 15, 6.99, 7.5, 499, 2);
+INSERT INTO Merch_store VALUES (9, "Golden Tee large", 13, 7.99, 7.5, 299, 4);
+INSERT INTO Merch_store VALUES (10, "Money is fake small", 18, 4.99, 7.5, 900, 7);
+INSERT INTO Merch_store VALUES (11, "Money is fake med", 20, 4.99, 5, 599, 5);
+INSERT INTO Merch_store VALUES (12, "Money is fake large", 13, 5.99, 7.5, 450, 6);
+INSERT INTO Merch_store VALUES (13, "pleasing tee small", 12, 8.99, 5, 599, 4);
+INSERT INTO Merch_store VALUES (14, "pleasing tee med", 6, 6.99, 5, 599, 8); 
+INSERT INTO Merch_store VALUES (15, "pleasing tee large", 60, 7.99, 5, 200, 2);
+
+SELECT * FROM Merch_store ORDER BY cost; 
+
+SELECT * FROM Merch_store ORDER BY sales DESC; 
+
+SELECT AVG(conversion_rate) AS "avg conversion rate" FROM merch_store;
+
+SELECT name, AVG(conversion_rate) AS "avg conversion rate" FROM Merch_store
+GROUP BY id
+ORDER BY conversion_rate;
+
+SELECT shipping, SUM(sales) AS "sales" FROM Merch_store GROUP BY shipping ORDER BY sales;
