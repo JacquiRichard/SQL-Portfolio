@@ -1,0 +1,69 @@
+CREATE a table to store the data.
+INSERT a few example rows in the table.
+Use an UPDATE to emulate what happens when you edit data in the app.
+Use a DELETE to emulate what happens when you delete data in the app.
+
+/* What does the app's SQL look like? */
+
+/* SUDOKU
+
+name, level, time, mistakes, completion
+
+comp_id 1 = complete
+comp_id 0 = not completed
+
+*/
+
+
+CREATE TABLE sudoku (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    level TEXT,
+    time NUMERIC,
+    mistakes NUMERIC,
+    comp_id NUMERIC);
+    
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 328, 0, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 13237, 2, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 515, 1, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 999, 0, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 407, 1, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 924, 3, 0);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("hard", 447, 3, 0);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 516, 1, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 555, 3, 0);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 656, 2, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 517, 2, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 1448, 1, 1);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("expert", 845, 1, 0);
+
+INSERT INTO sudoku (level, time, mistakes, comp_id) VALUES ("easy", 516, 1, 1);
+
+SELECT * FROM sudoku;
+
+UPDATE sudoku SET comp_id = "Completed" WHERE comp_id = 1;
+UPDATE sudoku SET comp_id = "Not Complete" WHERE comp_id = 0;
+UPDATE sudoku SET comp_id = "Lost" WHERE mistakes = 3;
+
+SELECT * FROM sudoku; 
+
+DELETE FROM sudoku WHERE level = "easy"; 
+
+SELECT * FROM sudoku;
+
+ALTER TABLE sudoku ADD score NUMERIC; 
+
+UPDATE sudoku SET score = 2 * (time - mistakes); 
+
+DELETE FROM sudoku WHERE score; 
