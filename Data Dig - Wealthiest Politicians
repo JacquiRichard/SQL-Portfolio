@@ -1,0 +1,97 @@
+CREATE TABLE politicians (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    state TEXT,
+    party TEXT,
+    est_net_worth INTEGER,
+    past INTEGER);
+    
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Greg Gianforte", "R","Mont", 189334335, 342850000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Paul Mitchell", "R", "Mich", 179610071, 62300000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Vernon Buchanan", "R", "Fla", 157169056, 115530000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Chris Collins", "R", "NY", 154497026, 864000000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Don Beyer", "D", "Va", 124901516, 123370000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Nancy Pelosi", "D", "Calif", 114662521, 614100000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Dianne Feinstein", "D", "Calif", 87938540, 102140000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Suzan DelBene", "D", "Wash", 79361042, 59140000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Fred Upton", "R", "Mich", 78965614, 33180000);
+INSERT INTO politicians (name, party, state, est_net_worth, past) VALUES ("Mark Warner", "D", "Va", 214092575, 245680000);
+
+CREATE TABLE investments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pol_id INTEGER,
+    type TEXT,
+    type_id INTEGER, 
+    sec_id INTEGER);
+
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (3, "Real Estate", 1, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (6, "Real Estate", 1, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (7, "Real Estate", 1, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (10, "Sec & Invest", 2, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (9, "Sec & Invest", 2, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (8, "Sec & Invest", 2, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (2, "Sec & Invest", 2, 1);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (7, "Lodging", 3, 2);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (1, "Electronics Mfg", 4, 3);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (8, "Electronics Mfg", 4, 3);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (4, "Electronics Mfg", 4, 3);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (6, "Electronics Mfg", 4, 3);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (2, "Credit Unions", 5, 2);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (10, "Telecom", 6, 3);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (1, "Pharma", 7, 6);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (4, "Pharma", 7, 6);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (3, "Air Transport", 8, 4);
+INSERT INTO investments (pol_id, type, type_id, sec_id) VALUES (9, "Misc Manufacturing", 9, 2);
+
+
+CREATE TABLE sectors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sector TEXT);
+
+INSERT INTO sectors (sector) VALUES ("Fin/ Ins / RE");
+INSERT INTO sectors (sector) VALUES ("Misc Biz");
+INSERT INTO sectors (sector) VALUES ("Electronics/Communicaions");
+INSERT INTO sectors (sector) VALUES ("Transportation");
+INSERT INTO sectors (sector) VALUES ("Energy-Net Resources");
+INSERT INTO sectors (sector) VALUES ("Health");
+
+/* Wealthiest politicians By Order*/ 
+
+SELECT * FROM sectors;
+SELECT politicians.name, politicians.state, politicians.party, investments.type, sectors.sector FROM politicians
+    JOIN investments
+    ON investments.pol_id = politicians.id
+    JOIN sectors
+    ON sectors.id = investments.sec_id
+    ORDER BY est_net_worth DESC;
+
+/*Most invested sectors */
+
+SELECT COUNT(sectors.id) AS most_invested_sectors, sectors.sector FROM sectors
+    JOIN investments
+    ON sectors.id = investments.sec_id
+    JOIN politicians
+    ON investments.pol_id = politicians.id
+    GROUP BY sector
+    ORDER BY COUNT(sectors.id) DESC;
+
+/* Most popular investments */ 
+
+SELECT COUNT(investments.type_id) AS most_popular_investments, investments.type, sectors.sector, AVG(politicians.est_net_worth) AS avg_net_worth FROM investments
+    LEFT OUTER JOIN sectors
+    ON sectors.id = investments.sec_id
+    LEFT OUTER JOIN politicians
+    ON investments.pol_id = politicians.id
+    GROUP BY type
+    ORDER BY COUNT(investments.type_id) DESC;
+
+/* Avg net worth */
+    
+SELECT AVG(est_net_worth) AS average_net_worth FROM politicians;
+
+/*Politicians whose wealth grew the most in the last 3 years their, net worth, net worth change, & investments */
+
+SELECT politicians.name, politicians.party, politicians.state, investments.type, politicians.est_net_worth, politicians.past, (est_net_worth - past) AS change_in_income FROM politicians
+   LEFT OUTER JOIN investments
+    ON politicians.id = investments.pol_id
+    ORDER BY change_in_income DESC;
