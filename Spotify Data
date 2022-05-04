@@ -1,0 +1,125 @@
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness text NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL 
+);
+
+/* Songs By Popularity */
+SELECT * FROM Spotifydata
+ORDER BY popularity DESC;
+
+/* Olivia Rodrigo Songs By Popularity */
+SELECT * FROM Spotifydata
+WHERE artist_name LIKE '%Olivia_R%'
+ORDER BY popularity DESC;
+
+/* Longest song */
+SELECT artist_name, track_name, MAX(duration_ms) FROM spotifydata;
+
+/*Shortest song*/
+SELECT artist_name, track_name, MIN(duration_ms) FROM spotifydata;
+
+/* Artists with more than 2 songs over 90 in popularity */ 
+SELECT artist_name, COUNT(track_id) AS songs_over_90_pop 
+FROM Spotifydata
+WHERE popularity >= 90
+GROUP BY artist_name
+HAVING COUNT(track_id) > 1
+ORDER BY COUNT(track_id) DESC;
+
+/* 5 least Popular Songs on Top 50 */
+SELECT artist_name, track_name, popularity FROM Spotifydata
+ORDER BY popularity ASC
+LIMIT 5;
+
+SELECT * FROM Spotifydata
+ORDER BY danceability DESC;
+
+/* How Many Songs Does Each Artist Have In Top 50 */
+SELECT artist_name, COUNT(track_id)
+FROM Spotifydata
+GROUP BY artist_name
+ORDER BY COUNT(track_id) DESC;
+
+/* Top 10 artists are by popularity */
+SELECT track_name, artist_name, popularity
+FROM BIT_DB.spotifydata
+ORDER BY popularity desc
+LIMIT 10
+
+/* Who Has Most Popular Songs On Average */
+SELECT artist_name, SUM(popularity)/COUNT(track_id)
+FROM Spotifydata
+GROUP BY artist_name
+HAVING COUNT(track_id) > 1
+ORDER BY SUM(popularity)/COUNT(track_id) DESC;
+
+/* Fastest songs */
+SELECT * FROM Spotifydata
+ORDER BY tempo DESC;
+
+/* Best Artists To Dance TO */
+SELECT artist_name, AVG(danceability) FROM Spotifydata
+GROUP BY artist_name
+ORDER BY danceability DESC;
+
+
+SELECT
+artist_name
+,avg(popularity)
+,avg(danceability)
+,avg(energy)
+FROM BIT_DB.spotifydata
+GROUP BY artist_name;
+
+/* Most Popular Artists */
+SELECT artist_name, avg(popularity) FROM Spotifydata
+WHERE popularity > (SELECT AVG(popularity) FROM Spotifydata)
+GROUP BY artist_name
+HAVING COUNT(track_id) > 2
+ORDER BY AVG(popularity) DESC;
+
+/* Most Danceable Songs */
+SELECT artist_name, track_name, avg(danceability) FROM Spotifydata
+WHERE danceability > (SELECT AVG(danceability) FROM Spotifydata)
+GROUP BY track_name
+ORDER BY AVG(danceability) DESC;
+
+/* Fastest Songs */
+SELECT artist_name, track_name, tempo FROM Spotifydata
+WHERE tempo > (SELECT AVG(tempo) FROM Spotifydata)
+GROUP BY track_name
+ORDER BY AVG(tempo) DESC;
+
+/* Most Emo Songs */
+SELECT artist_name, track_name, acousticness, tempo FROM Spotifydata
+WHERE tempo < (SELECT AVG(tempo) FROM Spotifydata) AND acousticness > (SELECT AVG(acousticness) FROM Spotifydata)
+GROUP BY track_name
+ORDER BY acousticness DESC;
+
+SELECT * FROM spotifydata
+ORDER BY artist_name ASC;
+
+/*Least Speechy Songs */
+SELECT artist_name, track_name, MIN(speechiness) FROM spotifydata;
+
+/* Most Talkative Songs */ 
+SELECT artist_name, track_name, AVG(speechiness) FROM Spotifydata
+WHERE speechiness > (SELECT AVG(speechiness) FROM Spotifydata)
+GROUP BY artist_name
+ORDER BY AVG(speechiness) DESC;
